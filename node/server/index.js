@@ -3,10 +3,14 @@ var body_parser = require("body-parser")
 var arDrone = require('ar-drone');
 var client  = arDrone.createClient();
 
+app.get('/', function(req, res){
+	res.send("kys")
+})
+
 app.get('/sandwich', function(req, res){
 	// turn on arduino
 	// turn on drone
-	client.takeOff()
+	//client.takeOff()
 	// fly drone to x location
 	res.send("coolios")
 })
