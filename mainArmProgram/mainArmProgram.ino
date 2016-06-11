@@ -11,12 +11,14 @@ int servoForearmPin = 11;
 
 int base90 = 300;
 
-int armLowered = 0;
-int armRaised = 90;
+int armLowered = 90;
+int armRaised = 50;
 
-int forearmLowered = 0;
+int forearmLowered = 60;
 int forearmRaised = 90;
 
+int forearmSet = 0;
+int armSet = 0;
 int currBasePos = 0;
 
 void baseTurn(int baseTurnDirection, int baseTurnDegrees)
@@ -38,23 +40,41 @@ void forearmTurn(int forearmTurnDegrees)
 
 void armDown()
 {
-  while(servoArm.read() > armLowered || )
+  int armInitial = servoArm.read();
+  int forearmInitial = servoForearm.read();
+  for(int i = 0; i <= 100; i++)
+  {
+    servoArm.write(map(i, 0, 100, armInitial, armLowered));
+    servoForearm.write(map(i, 0, 100, forearmInitial, forearmLowered));
+  }
 }
 
+void armUp()
+{
+  int armInitial = servoArm.read();
+  int forearmInitial = servoForearm.read();
+  for(int i = 0; i <= 100; i++)
+  {
+    servoArm.write(map(i, 0, 100, armInitial, armRaised));
+    servoForearm.write(map(i, 0, 100, forearmInitial, forearmRaised));
+  }
+}
 
 void setup() {
   servoBase.attach(servoBasePin);
   servoBase.write(90);
   servoArm.attach(servoArmPin);
-  servoArm.write(90);
   servoForearm.attach(servoForearmPin);
   pinMode(vacuumPin, OUTPUT);
-  baseTurn(1, 360);
-  baseTurn(-1, 360);
-  armTurn(armRaised);
-  armTurn(armLowered);
+  
 }
 
 void loop()
 {
+  servoArm.write(armLowered);
+  servoForearm.write(forearmLowered);
+  delay(1000);
+  servoArm.write(armRaised);
+  servoForearm.write(forearmRaised);
+  delay(5000);
 }
