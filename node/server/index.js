@@ -1,7 +1,7 @@
 var app = require("express")()
 var body_parser = require("body-parser")
-var arDrone = require('ar-drone');
-var client  = arDrone.createClient();
+
+var flight = false
 
 app.get('/', function(req, res){
 	res.send("kys")
@@ -10,9 +10,14 @@ app.get('/', function(req, res){
 app.get('/sandwich', function(req, res){
 	// turn on arduino
 	// turn on drone
-	//client.takeOff()
 	// fly drone to x location
-	res.send("coolios")
+	flight = true
+	res.send(flight)
+})
+
+app.get('/sandwich_done', function(req, res){
+	flight = false
+	res.send(flight)
 })
 
 app.listen(3000, function () {
