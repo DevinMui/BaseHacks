@@ -1,25 +1,18 @@
 var app = require("express")()
 var body_parser = require("body-parser")
-
-var flight = false
+var PythonShell = require('python-shell')
 
 app.get('/', function(req, res){
 	res.send("kys")
 })
 
 app.get('/sandwich', function(req, res){
-	// turn on arduino
-	// turn on drone
-	// fly drone to x location
-	flight = true
-	res.send(flight)
-})
-
-app.get('/sandwich_done', function(req, res){
-	flight = false
-	res.send(flight)
+	PythonShell.run('ser.py', function (err) {
+	  if (err) throw err
+	  res.send("hell yeah")
+	})
 })
 
 app.listen(3000, function () {
-  console.log('app running');
+  console.log('app running')
 });

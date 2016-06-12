@@ -47,7 +47,7 @@ Hello.prototype.intentHandlers = {
     "Make": function (intent, session, response) {
         //response.intent.latitude, response.intent.longitude
         var options = {
-            url: 'http://647ba36b.ngrok.io/sandwich'
+            url: 'http://fa61082d.ngrok.io/sandwich'
         };
         request.get(options, function(err, res, body){
             if(!err)

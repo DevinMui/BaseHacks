@@ -1,5 +1,5 @@
 #include <Servo.h>
-
+String hello = "";
 Servo servoBase;
 Servo servoArm;
 Servo servoForearm;
@@ -154,7 +154,7 @@ void setup() {
   delay(3000);
   servoVacuum.write(vacuumLowered - 20);*/
   
-  mainRoutine();
+  //mainRoutine();
   //armUp();
   //baseTurn(-.1, 90 / 4);
   //baseNTurn(180);
@@ -162,13 +162,10 @@ void setup() {
 
 void loop()
 {
-  Serial.println(int(servoVacuum.read()));
-  /* checks value from server/connected computer
-  if(Serial.read() == "sandwich"){
+  Serial.print(Serial.read());
+  Serial.println();
+  // checks value from server/connected computer
+  if(Serial.parseInt() == 1){
     mainRoutine();
   }
-  */
-  //baseTurn(1, 90);
-  //mainRoutine();
-  //delay(1000);
 }
