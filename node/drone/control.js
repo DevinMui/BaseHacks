@@ -6,6 +6,5 @@ client.takeoff(function(){
 	setTimeout(function(){
 		client.front(0)
 		client.land()
-	}, 3000)
+	}, 2000)
 })
-
