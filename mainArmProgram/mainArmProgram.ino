@@ -3,28 +3,37 @@
 Servo servoBase;
 Servo servoArm;
 Servo servoForearm;
+Servo servoVacuum;
 
-int vacuumPin = 8;
 int servoBasePin = 9;
 int servoArmPin = 10;
 int servoForearmPin = 11;
+int servoVacuumPin = 6;
 
-int base90 = 250;
+int base90 = 200;
 
+int armLoweredHard = 115;
 int armLowered = 95;
 int armRaised = 50;
 
 int forearmLowered = 60;
-int forearmRaised = 90;
+int forearmRaised = 120;
 
-int forearmSet = 0;
-int armSet = 0;
-int currBasePos = 0;
+int vacuumLowered = 150;
+int vacuumRaised = 0;
 
 void baseTurn(int baseTurnDirection, int baseTurnDegrees)
 {
-  servoBase.write(90 + (baseTurnDirection * -45));
-  delay(2 * baseTurnDegrees / 90 * base90);
+  servoBase.write(90 + (baseTurnDirection * -4));
+  delay(4 * baseTurnDegrees / 90 * base90);
+  //delay(3000);
+  servoBase.write(90);
+}
+void baseNTurn(int baseTurnDegrees)
+{
+  servoBase.write(94);
+  delay(11 * baseTurnDegrees / 90 * base90);
+  //delay(3000);
   servoBase.write(90);
 }
 
@@ -38,6 +47,20 @@ void forearmTurn(int forearmTurnDegrees)
   servoForearm.write(forearmTurnDegrees);
 }
 
+void armDownHard()
+{
+  int armInitial = servoArm.read();
+  int forearmInitial = servoForearm.read();
+  for(int i = 0; i <= 100; i++)
+  {
+    servoArm.write(map(i, 0, 100, armInitial, armLoweredHard));
+    //servoForearm.write(map(i, 0, 100, forearmInitial, forearmLowered));
+    delay(20);
+  }
+  servoArm.write(armLoweredHard);
+  //servoForearm.write(forearmLowered);
+  delay(500);
+}
 void armDown()
 {
   int armInitial = servoArm.read();
@@ -45,14 +68,13 @@ void armDown()
   for(int i = 0; i <= 100; i++)
   {
     servoArm.write(map(i, 0, 100, armInitial, armLowered));
-    servoForearm.write(map(i, 0, 100, forearmInitial, forearmLowered));
+    //servoForearm.write(map(i, 0, 100, forearmInitial, forearmLowered));
     delay(20);
   }
   servoArm.write(armLowered);
-  servoForearm.write(forearmLowered);
+  //servoForearm.write(forearmLowered);
   delay(500);
 }
-
 void armUp()
 {
   int armInitial = servoArm.read();
@@ -60,22 +82,27 @@ void armUp()
   for(int i = 0; i <= 100; i++)
   {
     servoArm.write(map(i, 0, 100, armInitial, armRaised));
-    servoForearm.write(map(i, 0, 100, forearmInitial, forearmRaised));
+    //servoForearm.write(map(i, 0, 100, forearmInitial, forearmRaised));
     delay(20);
   }
   servoArm.write(armRaised);
-  servoForearm.write(forearmRaised);
+  //servoForearm.write(forearmRaised);
   delay(500);
 }
 
 void vacuumOn()
 {
-  digitalWrite(vacuumPin, HIGH);
+  servoVacuum.attach(servoVacuumPin);
+  servoVacuum.write(vacuumLowered);
+  delay(500);
 }
 
 void vacuumOff()
 {
-  digitalWrite(vacuumPin, LOW);
+  servoVacuum.attach(servoVacuumPin);
+  servoVacuum.write(vacuumLowered - 20);
+  delay(500);
+  
 }
 
 void mainRoutine()
@@ -84,57 +111,64 @@ void mainRoutine()
   vacuumOff();
   //Grab first slice of bread
   armUp();
-  baseTurn(1, 90);
-  armDown();
+  baseTurn(1, 100);
+  armDownHard();
   vacuumOn();
   //Drop first slice of bread
   armUp();
-  baseTurn(-1, 180);
+  baseNTurn(400); // off by 75 for some reason
   armDown();
-  vacuumOff();/*
+  vacuumOff();
   //Grab meat
   armUp();
-  baseTurn(1, 120);
-  armDown();
+  baseTurn(1, 250);
+  armDownHard();
   vacuumOn();
   //Drop meat
   armUp();
-  baseTurn(-1, 210);
+  baseNTurn(540);
   armDown();
   vacuumOff();
-  //Grab cucumber
   armUp();
-  baseTurn(1, 150);
-  armDown();
+  baseTurn(1, 175);
+  armDownHard();
   vacuumOn();
-  //Drop cucumber
+  //Drop first slice of bread
   armUp();
-  baseTurn(-1, 240);
+  baseNTurn(400); // off by 75 for some reason
   armDown();
   vacuumOff();
-  //Grab second slice of bread
-  armUp();
-  baseTurn(1, 90);
-  armDown();
-  vacuumOn();
-  //Drop second slice of bread
-  armUp();
-  baseTurn(-1, 180);
-  armDown();
-  vacuumOff();*/
+  
 }
 
 
 
 void setup() {
+  Serial.begin(9600);
   servoBase.attach(servoBasePin);
-  servoBase.write(90);
+  //servoBase.write(90);
   servoArm.attach(servoArmPin);
   servoForearm.attach(servoForearmPin);
-  pinMode(vacuumPin, OUTPUT);
+  servoVacuum.attach(servoVacuumPin);
+  /*servoVacuum.write(vacuumLowered);
+  delay(3000);
+  servoVacuum.write(vacuumLowered - 20);*/
+  
   mainRoutine();
+  //armUp();
+  //baseTurn(-.1, 90 / 4);
+  //baseNTurn(180);
 }
 
 void loop()
 {
+  Serial.println(int(servoVacuum.read()));
+  /* checks value from server/connected computer
+  if(Serial.read() == "sandwich"){
+    mainRoutine();
+  }
+  */
+  //baseTurn(1, 90);
+  //mainRoutine();
+  //delay(1000);
 }
