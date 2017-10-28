@@ -2,7 +2,7 @@
 String hello = "";
 Servo servoBase;
 Servo servoArm;
-Servo servoForearm;
+Servo servoForearm; 
 Servo servoVacuum;
 
 int servoBasePin = 9;
