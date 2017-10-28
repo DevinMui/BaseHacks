@@ -7,7 +7,7 @@ var APP_ID = "amzn1.echo-sdk-ams.app.bccbc1e0-a82b-407a-a34f-dce2f6baaebb"; //re
 /**
  * The AlexaSkill prototype and helper functions
  */
-var AlexaSkill = require('./AlexaSkill');
+var AlexaSkill = require('./AlexaSkill'); 
 
 /**
  * Hello is a child of AlexaSkill.
