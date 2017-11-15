@@ -1,5 +1,7 @@
 # BaseHacks
 
+![SaaS](medium.jpg)
+
 ### Description
 
 A robotic arm that creates sandwiches. It can be controlled via Amazon Alexa, a web browser, or through the push of a button on the physical arm. Please ignore the swear words on our commit messages. We were at a hackathon programming for 24-hours straight with no breaks. We were overwhelmed with joy when it worked.
